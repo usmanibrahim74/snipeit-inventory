@@ -110,22 +110,163 @@
         {{ Form::close() }}
 
           <script>
-              var myForm = document.getElementById('bulkForm');
-              myForm.onsubmit = function(e) {
-                  var select = document.querySelector('select[name=bulk_actions]').value;
-                  if(select == "labels"){
-                      var w = window.open('about:blank','Popup_Window','toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=300,left = 312,top = 234');
-                      this.target = 'Popup_Window';
-                  }
-              };
+              // var myForm = document.getElementById('bulkForm');
+              // myForm.onsubmit = function(e) {
+              //     var select = document.querySelector('select[name=bulk_actions]').value;
+              //     if(select == "labels"){
+              //         var w = window.open('about:blank','Popup_Window','toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=300,left = 312,top = 234');
+              //         this.target = 'Popup_Window';
+              //     }
+              // };
           </script>
       </div><!-- ./box-body -->
     </div><!-- /.box -->
   </div>
+
+  <div class="labels-container d-none">
+
+  </div>
 </div>
+
 @stop
 
 @section('moar_scripts')
 @include('partials.bootstrap-table')
 
+<script src="{{ asset('/js/jspdf.min.js') }}"></script>
+<script>
+  function convertImageToCanvas(image) {
+    var canvas = document.createElement("canvas");
+    canvas.width = image.width;
+    canvas.height = image.height;
+    canvas.getContext("2d").drawImage(image, 0, 0);
+
+    return canvas;
+  }
+  function convertCanvasToImage(canvas,callback) {
+    var image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+    return image;
+  }
+
+  $(document).ready(()=>{
+    $('#bulkForm').submit((e)=>{
+
+      let action = $('[name="bulk_actions"]').val();
+      if(action=="labels"){
+        e.preventDefault();
+        let url = $('#bulkForm').attr('action');
+        let data = $('#bulkForm').serialize()
+        $.post(url,data,(response)=>{
+          $('.labels-container').html(response);
+          generatePdf();
+          $('#bulkForm input[type=hidden]:not([name=_token])').remove()
+        });
+      }
+    })
+  })
+
+  let text_count=0;
+  async function generateLabel(i,labels,doc){
+    var item = labels[i];
+
+
+
+    var image = $(item).find('img')[0];
+    if(image){
+      var img = new Image();
+      img.src = image.src;
+      img.onload = ()=>{
+        var canvas = convertImageToCanvas(img);
+        var imgData = convertCanvasToImage(canvas);
+
+        console.log(imgData);
+        doc.addImage(imgData, 'JPEG', 1.2, 0.1, 0.20, 0.2);
+        text_count=0;
+        setTextData(item,doc);
+        if(i < labels.length - 1){
+          doc.addPage()
+          i = i+1;
+          generateLabel(i,labels,doc);
+        }else{
+          doc.save("a4.pdf");
+        }
+
+      }
+
+    }else{
+      text_count=0;
+      setTextData(item,doc);
+      if(i < labels.length - 1){
+        doc.addPage()
+        i = i+1;
+        generateLabel(i,labels,doc);
+      }else{
+        doc.save("a4.pdf");
+      }
+    }
+
+
+
+
+
+
+  }
+  function setTextData(item,doc){
+    var lineX = 0.05;
+    var lineY = 0.1;
+    var increment = 0.15
+    var isCustomLabel = true;
+    if(!$(item).hasClass('custom-label')){
+      isCustomLabel = false;
+    }
+    doc.setFontType('bold');
+    $(item).find('p').each(function (i,item) {
+      var text = $(item).text();
+      if(text.toLowerCase().includes('sid') && !isCustomLabel){
+        doc.setFontSize({{ $settings->labels_fontsize*2.5 }});
+        lineY +=0.09;
+      }else if(text.toLowerCase().includes('model') && !isCustomLabel ){
+        text = text.replace("Model: ","");
+        doc.setFontSize({{ $settings->labels_fontsize*1.5 }});
+        lineY +=0.04;
+
+      }else if(text.toLowerCase().includes('category')){
+        doc.setFontSize({{ $settings->labels_fontsize*1.2 }});
+        // lineY -=0.0;
+      }else{
+        doc.setFontSize({{ $settings->labels_fontsize*1.2 }});
+      }
+      if(text_count == 5){
+        doc.addPage();
+        lineY = 0.1;
+        text_count = 0;
+      }else{
+        text_count++;
+      }
+      doc.text(lineX, lineY, text);
+
+      lineY += increment;
+
+    })
+  }
+
+  function generatePdf(){
+    var doc = new jsPDF({
+      orientation: "landscape",
+      unit: "in",
+      format: [{{ $settings->labels_width }}, {{ $settings->labels_height }}]
+    })
+
+
+
+    var labels = $('.label');
+    if(labels.length){
+      generateLabel(0,labels,doc)
+    }
+
+
+
+  }
+</script>
 @stop

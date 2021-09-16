@@ -54,7 +54,7 @@
                         <div class="form-group {{ $errors->has('name') ? 'error' : '' }}">
                             {{ Form::label('ticket', "Ticket ID", array('class' => 'col-md-3 control-label')) }}
                             <div class="col-md-8">
-                                <input class="form-control" type="text" name="ticket" id="ticket" value="{{ old('ticket', $asset->ticket_id) }}" tabindex="1">
+                                <input class="form-control required" required data-validation="required" type="text" name="ticket" id="ticket" value="{{ old('ticket', $asset->ticket_id) }}" tabindex="1">
                                 {!! $errors->first('name', '<span class="alert-msg" aria-hidden="true"><i class="fa fa-times" aria-hidden="true"></i> :message</span>') !!}
                             </div>
                         </div>

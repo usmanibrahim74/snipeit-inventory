@@ -49,8 +49,9 @@ class BulkAssetsController extends Controller
         if ($request->filled('bulk_actions')) {
             switch($request->input('bulk_actions')) {
                 case 'labels':
+//                    dd(Asset::with(['model.category','model.manufacturer'])->find($asset_ids)->toArray());
                     return view('hardware/pdf')
-                        ->with('assets', Asset::find($asset_ids))
+                        ->with('assets', Asset::with(['model.category','model.manufacturer'])->find($asset_ids))
                         ->with('settings', Setting::getSettings())
                         ->with('bulkedit', true)
                         ->with('count', 0);
@@ -86,9 +87,9 @@ class BulkAssetsController extends Controller
 
                 $barcode = new \Com\Tecnick\Barcode\Barcode();
                 $barcode_obj = $barcode->getBarcodeObj(
-                    $settings->alt_barcode,
+                    $settings->barcode_type,
                     $asset->asset_tag,
-                    ($barcode_width < 300 ? $barcode_width : 300),
+                    20,
                     20
                 )->setBackgroundColor('white');
 //                $im = new Imagick();
