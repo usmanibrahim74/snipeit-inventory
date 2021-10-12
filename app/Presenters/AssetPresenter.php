@@ -79,6 +79,12 @@ class AssetPresenter extends Presenter
                 "title" => trans('admin/models/table.modelnumber'),
                 "visible" => false
             ], [
+                "field" => "ticket_id",
+                "searchable" => true,
+                "sortable" => true,
+                "title" => "Ticket ID",
+                "visible" => true
+            ], [
                 "field" => "category",
                 "searchable" => true,
                 "sortable" => true,
@@ -257,6 +263,8 @@ class AssetPresenter extends Presenter
         $fields =  CustomField::whereHas('fieldset', function ($query) {
             $query->whereHas('models');
         })->get();
+
+//        dd($fields->toArray());
 
 
         // Note: We do not need to e() escape the field names here, as they are already escaped when

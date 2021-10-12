@@ -176,8 +176,8 @@
                   <form class="navbar-form navbar-left form-horizontal" role="search" action="{{ route('findbytag/hardware') }}" method="get">
                       <div class="col-xs-12 col-md-12">
                           <div class="col-xs-12 form-group">
-                              <label class="sr-only" for="tagSearch">{{ trans('general.lookup_by_tag') }}</label>
-                              <input type="text" class="form-control" id="tagSearch" name="assetTag" placeholder="{{ trans('general.lookup_by_tag') }}">
+                              <label class="sr-only" for="tagSearch">{{ trans('general.lookup_by_sid_tid_serial') }}</label>
+                              <input type="text" class="form-control" id="tagSearch" name="assetTag" placeholder="{{ trans('general.lookup_by_sid_tid_serial') }}">
                               <input type="hidden" name="topsearch" value="true" id="search">
                           </div>
                           <div class="col-xs-1">

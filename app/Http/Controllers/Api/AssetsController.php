@@ -74,6 +74,7 @@ class AssetsController extends Controller
             'checkout_counter',
             'checkin_counter',
             'requests_counter',
+            'ticket_id',
         ];
 
         $filter = array();
@@ -294,6 +295,8 @@ class AssetsController extends Controller
 
         $total = $assets->count();
         $assets = $assets->skip($offset)->take($limit)->get();
+//        dd($assets->toArray());
+
         // dd($assets);
         return (new AssetsTransformer)->transformAssets($assets, $total);
     }

@@ -730,7 +730,7 @@
                                             </strong>
                                         </div>
                                         <div class="col-md-6">
-                                            {{ ($asset->ticket_id) ? (int) $asset->ticket_id : 'NULL' }}
+                                            {{ ($asset->ticket_id) ? $asset->ticket_id : 'NULL' }}
                                         </div>
                                     </div>
 

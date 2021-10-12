@@ -140,6 +140,7 @@
     'logo_size'				=> 'Square logos look best with Logo + Text. Logo maximum display size is 50px high x 500px wide.  ',
     'logout'				=> 'Logout',
     'lookup_by_tag'     => 'Lookup by Asset Tag',
+    'lookup_by_sid_tid_serial'  => 'Lookup by SID, TID, Serial',
     'maintenances'          => 'Maintenances',
     'manufacturer'			=> 'Manufacturer',
     'manufacturers'			=> 'Manufacturers',

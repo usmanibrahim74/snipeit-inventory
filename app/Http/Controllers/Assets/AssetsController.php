@@ -412,7 +412,7 @@ class AssetsController extends Controller
         $topsearch = ($request->get('topsearch')=="true");
 
         $tag = $request->get('assetTag');
-        if (!$asset = Asset::where('asset_tag', '=', $tag)->orWhere('serial','like','%'.$tag.'%')
+        if (!$asset = Asset::where('asset_tag', '=', $tag)->orWhere('serial','like','%'.$tag.'%')->orWhere('ticket_id','like','%'.$tag.'%')
             ->first()) {
             return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
         }
