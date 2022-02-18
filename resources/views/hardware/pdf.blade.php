@@ -89,7 +89,7 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->alt_barcode!='')
             @if ((($settings->alt_barcode_enabled=='1') && $settings->alt_barcode!=''))
                 <div class="barcode_container">
                     @php
-                        if(false){
+                        if(true){
                         $path = asset("hardware/".$asset->id.'/barcode');
                         $path = file_get_contents($path);
 
@@ -108,7 +108,7 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->alt_barcode!='')
 
                 <div class="barcode_container">
                     @php
-                        if(false){
+                        if(true){
 
                         $path = asset("hardware/".$asset->id.'/barcode');
 
@@ -133,18 +133,6 @@ $qr_size = ($settings->alt_barcode_enabled=='1') && ($settings->alt_barcode!='')
                 @endforeach
             @endif
 
-                @if (($asset->model && $asset->model->category))
-                    <p>Category: {{ $asset->model->category->name }}</p>
-                @endif
-                @if (($asset->model && $asset->model->category))
-                    <p>Category: {{ $asset->model->category->name }}</p>
-                @endif
-                @if (($asset->model && $asset->model->category))
-                    <p>Category: {{ $asset->model->category->name }}</p>
-                @endif
-                @if (($asset->model && $asset->model->category))
-                    <p>Category: {{ $asset->model->category->name }}</p>
-                @endif
 
         </div>
 
